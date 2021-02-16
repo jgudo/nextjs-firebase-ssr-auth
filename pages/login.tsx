@@ -1,10 +1,16 @@
+import withAuthServerSideProps from '@/libs/hoc/withAuthServerSide';
 import firebaseClient from '@/utils/firebaseClient';
+import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import Router from 'next/router';
+import React, { FC, useState } from 'react';
 
-export default (_props: any) => {
+const Login: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+
+    if (user) Router.push('/');
+
     return (
         <div>
             <Link href="/">
@@ -43,3 +49,7 @@ export default (_props: any) => {
         </div>
     );
 };
+
+export const getServerSideProps = withAuthServerSideProps({ redirectIfNotAuth: false });
+
+export default Login;

@@ -1,21 +1,10 @@
-import { useAuth } from '@/provider/AuthProvider';
+import withAuthServerSideProps from '@/libs/hoc/withAuthServerSide';
 import styles from '@/styles/Home.module.css';
 import Link from 'next/link';
 
-export default function Home() {
-  const { user } = useAuth();
-
+export default function Home({ user }) {
   return (
     <div className={styles.container}>
-      <p>{`User ID: ${user ? user.uid : 'no user signed in'}`}</p>
-
-      <p>
-        <Link href="/authenticated">
-          <a className={styles.link}>
-            Go to authenticated route
-          </a>
-        </Link>
-      </p>
       {!user && (
         <p>
           <Link href="/login">
@@ -23,6 +12,11 @@ export default function Home() {
           </Link>
         </p>
       )}
+      <Link href="/post/create">
+        <a className={styles.link}>Create Post</a>
+      </Link>
     </div>
   )
 }
+
+export const getServerSideProps = withAuthServerSideProps({ redirectIfNotAuth: false });
